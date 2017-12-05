@@ -23,10 +23,12 @@ public class someshit extends Application{
 	private static  BufferedReader reader;
 	private static PrintWriter writer;
 	static TextArea ta;
+	static TextArea list;
 	private static String ID = "";
 	String target = null;
 	//ArrayList<String> target = new ArrayList<String>();
 
+	@SuppressWarnings("static-access")
 	@Override // Override the start method in the Application class 
 	public void start(Stage primaryStage) { 
 		// Panel p to hold the label and text field 
@@ -44,6 +46,11 @@ public class someshit extends Application{
 		paneforname.setStyle("-fx-border-color: blue");
 		paneforname.setLeft(new Label(" Enter Name: "));
 		
+		/*BorderPane paneforname1 = new BorderPane();
+		paneforname1.setPadding(new Insets(5, 5, 5, 5));
+		paneforname1.setStyle("-fx-border-color: blue");
+		paneforname1.setLeft(new Label(" Enter Name: "));*/
+		
 		TextField name = new TextField(); 
 		name.setAlignment(Pos.BOTTOM_RIGHT); 
 		paneforname.setCenter(name); 
@@ -51,13 +58,16 @@ public class someshit extends Application{
 		BorderPane mainPane = new BorderPane(); 
 		// Text area to display contents 
 		ta = new TextArea(); 
+		list = new TextArea();
+		//mainPane.setAlignment(list, Pos.BOTTOM_RIGHT);
 		mainPane.setBottom(new ScrollPane(ta)); 
+		mainPane.setRight(new ScrollPane(list));
 		mainPane.setCenter(paneForTextField); 
 		mainPane.setTop(paneforname);
 
 
 		// Create a scene and place it in the stage 
-		Scene scene = new Scene(mainPane, 450, 200); 
+		Scene scene = new Scene(mainPane, 800, 200); 
 		primaryStage.setTitle("Client"); // Set the stage title 
 		primaryStage.setScene(scene); // Place the scene in the stage 
 		primaryStage.show(); // Display the stage 
@@ -68,6 +78,7 @@ public class someshit extends Application{
 		name.setOnAction(e -> {
 			try {  
 				ID = name.getText();
+				People.add(ID);
 				Thread readerThread = new Thread(new IncomingReader(ID));
 				readerThread.start();
 			} 

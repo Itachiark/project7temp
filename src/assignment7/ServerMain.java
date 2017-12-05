@@ -14,7 +14,7 @@ import java.util.Observer;
 
 public class ServerMain {
 	
-	private ArrayList<PrintWriter> clientOutputStreams;
+	public ArrayList<String> AllClients;
 	//private ArrayList<ClientMain> clientArray = new ArrayList<ClientMain>();
 	//String message = null;
 	
