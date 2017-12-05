@@ -21,6 +21,7 @@ public class someshit extends Application{
 	private static  BufferedReader reader;
 	private static PrintWriter writer;
 	static TextArea ta;
+	private static String ID = "";
 
 	@Override // Override the start method in the Application class 
 	public void start(Stage primaryStage) { 
@@ -33,12 +34,22 @@ public class someshit extends Application{
 		TextField tf = new TextField(); 
 		tf.setAlignment(Pos.BOTTOM_RIGHT); 
 		paneForTextField.setCenter(tf); 
+		
+		BorderPane paneforname = new BorderPane();
+		paneforname.setPadding(new Insets(5, 5, 5, 5));
+		paneforname.setStyle("-fx-border-color: blue");
+		paneforname.setLeft(new Label(" Enter Name: "));
+		
+		TextField name = new TextField(); 
+		name.setAlignment(Pos.BOTTOM_RIGHT); 
+		paneforname.setCenter(name); 
 
 		BorderPane mainPane = new BorderPane(); 
 		// Text area to display contents 
 		ta = new TextArea(); 
-		mainPane.setCenter(new ScrollPane(ta)); 
-		mainPane.setTop(paneForTextField); 
+		mainPane.setBottom(new ScrollPane(ta)); 
+		mainPane.setCenter(paneForTextField); 
+		mainPane.setTop(paneforname);
 
 
 		// Create a scene and place it in the stage 
@@ -46,49 +57,37 @@ public class someshit extends Application{
 		primaryStage.setTitle("Client"); // Set the stage title 
 		primaryStage.setScene(scene); // Place the scene in the stage 
 		primaryStage.show(); // Display the stage 
-
-		tf.setOnAction(e -> { 
-			try { 
-				// Get the radius from the text field 
-				//double radius = Double.parseDouble(tf.getText().trim()); 
-				String message = tf.getText();
-				// Send the radius to the server 
-				//toServer.writeDouble(radius); 
-				//toServer.flush(); 
-				writer.println(message);
-				writer.flush();
-
-				// Get area from the server 
-				//double area = fromServer.readDouble(); 
-
-				// Display to the text area 
-				//ta.appendText(message + "\n"); 
-				//ta.appendText("Area received from the server is "
-				//		+ area + '\n');
-
+		
+		//Thread readerThread = new Thread(new IncomingReader());
+		//readerThread.start();
+		
+		name.setOnAction(e -> {
+			try {  
+				ID = name.getText();
+				Thread readerThread = new Thread(new IncomingReader(ID));
+				readerThread.start();
 			} 
 			catch (Exception ex) { 
 				System.err.println(ex); 
 			} 
 		}); 
 
-		/*try { 
-			// Create a socket to connect to the server 
-			@SuppressWarnings("resource")
-			Socket socket = new Socket("localhost", 8000); 
+		tf.setOnAction(e -> { 
+			try { 
+				String message = tf.getText();
+				writer.println(ID + " " + message);
+				writer.flush();
+				tf.setText("");
+			} 
+			catch (Exception ex) { 
+				System.err.println(ex); 
+			} 
+		}); 
 
-			// Create an input stream to receive data from the server 
-			fromServer = new DataInputStream(socket.getInputStream()); 
-
-			// Create an output stream to send data to the server 
-			toServer = new DataOutputStream(socket.getOutputStream()); 
-		} 
-		catch (IOException ex) { 
-			ta.appendText(ex.toString() + '\n');
-		}*/
 	}
 	
 	public static void main(String[] args) {
+		//launch(args);
 		try {
 			setUpNetworking();
 		} catch (Exception e) {
@@ -106,17 +105,29 @@ public class someshit extends Application{
 		writer = new PrintWriter(sock.getOutputStream());
 		System.out.println("networking established");
 		//Thread readerThread = new Thread(new IncomingReader(controller));
-		Thread readerThread = new Thread(new IncomingReader());
+		//Thread readerThread = new Thread(new IncomingReader());
 		//Thread readerThread = new Thread(new someshit());
-		readerThread.start();
+		//readerThread.start();
 	}
 	
 	static class IncomingReader implements Runnable {
+		String ID;
+		
+		public IncomingReader (String name){
+			this.ID = name;
+		}
+		
 		public void run() {
 			String message = "";
 			try {
 				while ((message = reader.readLine()) != null) {
-					ta.appendText(message + "\n");
+					String[] splited = message.split("\\s+");
+					for(int i = 0; i < splited.length; i++){
+						if(splited[i].equals(this.ID)){
+							ta.appendText(message + "\n");
+						}
+					}
+					//ta.appendText(message + "\n");
 				}
 			} catch (IOException ex) {
 				ex.printStackTrace();
