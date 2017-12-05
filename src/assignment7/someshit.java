@@ -2,7 +2,9 @@ package assignment7;
 /* From Daniel Liang's book */
 
 import java.io.*; 
-import java.net.*; 
+import java.net.*;
+import java.util.ArrayList;
+
 import javafx.application.Application; 
 import javafx.geometry.Insets; 
 import javafx.geometry.Pos; 
@@ -22,6 +24,8 @@ public class someshit extends Application{
 	private static PrintWriter writer;
 	static TextArea ta;
 	private static String ID = "";
+	String target = null;
+	//ArrayList<String> target = new ArrayList<String>();
 
 	@Override // Override the start method in the Application class 
 	public void start(Stage primaryStage) { 
@@ -75,8 +79,26 @@ public class someshit extends Application{
 		tf.setOnAction(e -> { 
 			try { 
 				String message = tf.getText();
-				writer.println(ID + " " + message);
-				writer.flush();
+				String[] splited = message.split("rs/");
+				if(splited.length == 2){
+					target = splited[0] + ID;
+					message = splited[1];
+					writer.println(target + " rs/ " + ID + " sd/" + message);
+					writer.flush();
+				}
+				else if(splited.length == 1){
+					if(target.equals(null)){
+						tf.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!");
+					}
+					writer.println(target + " rs/ " + ID + " sd/" + message);
+					writer.flush();
+				}
+				else{
+					tf.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!");
+				}
+				//target = splited[0];
+				//writer.println(ID + " " + message);
+				//writer.flush();
 				tf.setText("");
 			} 
 			catch (Exception ex) { 
@@ -121,10 +143,20 @@ public class someshit extends Application{
 			String message = "";
 			try {
 				while ((message = reader.readLine()) != null) {
-					String[] splited = message.split("\\s+");
-					for(int i = 0; i < splited.length; i++){
+					String[] splited = message.split("rs/");
+					System.out.println(splited[0]);
+					System.out.println(splited[1]);
+					/*for(int i = 0; i < splited.length; i++){
 						if(splited[i].equals(this.ID)){
 							ta.appendText(message + "\n");
+						}
+					}*/
+					String[] names = splited[0].split("\\s+");
+					for(int i = 0; i < names.length; i++){
+						System.out.println(names[i]);
+						if(names[i].equals(this.ID)){
+							String[] truemessage = splited[1].split("sd/");
+							ta.appendText(splited[0] + "(" + truemessage[0] + ")" + ":" + truemessage[1] + "\n");
 						}
 					}
 					//ta.appendText(message + "\n");
