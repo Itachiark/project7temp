@@ -160,7 +160,7 @@ public class someshit extends Application{
 			try {
 				while ((message = reader.readLine()) != null) {
 					String[] splited = message.split("rs/");
-					splited[0].toLowerCase();
+					//splited[0].toLowerCase();
 					//System.out.println(splited[0]);
 					//System.out.println(splited[1]);
 					/*for(int i = 0; i < splited.length; i++){
@@ -171,7 +171,7 @@ public class someshit extends Application{
 					String[] names = splited[0].split("\\s+");
 					for(int i = 0; i < names.length; i++){
 						//System.out.println(names[i]);
-						if(names[i].equals(this.ID.toLowerCase())){
+						if(names[i].equals(this.ID)){
 							String[] truemessage = splited[1].split("sd/");
 							ta.appendText(splited[0] + "(" + truemessage[0] + ")" + ": " + truemessage[1] + "\n");
 						}
