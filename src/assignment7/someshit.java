@@ -44,7 +44,7 @@ public class someshit extends Application{
 		BorderPane paneforname = new BorderPane();
 		paneforname.setPadding(new Insets(5, 5, 5, 5));
 		paneforname.setStyle("-fx-border-color: blue");
-		paneforname.setLeft(new Label(" Enter Name: "));
+		paneforname.setLeft(new Label("Enter Name (No Spaces): "));
 		
 		/*BorderPane paneforname1 = new BorderPane();
 		paneforname1.setPadding(new Insets(5, 5, 5, 5));
@@ -60,6 +60,8 @@ public class someshit extends Application{
 		ta = new TextArea(); 
 		ta.setWrapText(true);
 		ta.setEditable(false);
+		//ta.boundsInParentProperty();
+		//ta.
 		//list = new TextArea();
 		//mainPane.setAlignment(list, Pos.BOTTOM_RIGHT);
 		mainPane.setCenter(new ScrollPane(ta)); 
@@ -135,7 +137,7 @@ public class someshit extends Application{
 	
 	private static void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
-		Socket sock = new Socket("localhost", 4242);
+		Socket sock = new Socket("172.20.10.3", 4242);
 		InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		reader = new BufferedReader(streamReader);
 		writer = new PrintWriter(sock.getOutputStream());
