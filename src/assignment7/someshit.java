@@ -28,7 +28,7 @@ public class someshit extends Application{
 	String target = null;
 	//ArrayList<String> target = new ArrayList<String>();
 
-	@SuppressWarnings("static-access")
+	//@SuppressWarnings("static-access")
 	@Override // Override the start method in the Application class 
 	public void start(Stage primaryStage) { 
 		// Panel p to hold the label and text field 
@@ -58,16 +58,18 @@ public class someshit extends Application{
 		BorderPane mainPane = new BorderPane(); 
 		// Text area to display contents 
 		ta = new TextArea(); 
-		list = new TextArea();
+		ta.setWrapText(true);
+		ta.setEditable(false);
+		//list = new TextArea();
 		//mainPane.setAlignment(list, Pos.BOTTOM_RIGHT);
-		mainPane.setBottom(new ScrollPane(ta)); 
-		mainPane.setRight(new ScrollPane(list));
-		mainPane.setCenter(paneForTextField); 
+		mainPane.setCenter(new ScrollPane(ta)); 
+		//mainPane.setRight(new ScrollPane(list));
+		mainPane.setBottom(paneForTextField); 
 		mainPane.setTop(paneforname);
 
 
 		// Create a scene and place it in the stage 
-		Scene scene = new Scene(mainPane, 800, 200); 
+		Scene scene = new Scene(mainPane, 540, 260); 
 		primaryStage.setTitle("Client"); // Set the stage title 
 		primaryStage.setScene(scene); // Place the scene in the stage 
 		primaryStage.show(); // Display the stage 
@@ -99,13 +101,13 @@ public class someshit extends Application{
 				}
 				else if(splited.length == 1){
 					if(target.equals(null)){
-						tf.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!");
+						ta.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!" + "\n");
 					}
 					writer.println(target + " rs/ " + ID + " sd/" + message);
 					writer.flush();
 				}
 				else{
-					tf.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!");
+					ta.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!" + "\n");
 				}
 				//target = splited[0];
 				//writer.println(ID + " " + message);
@@ -113,7 +115,8 @@ public class someshit extends Application{
 				tf.setText("");
 			} 
 			catch (Exception ex) { 
-				System.err.println(ex); 
+				ta.setText("Invalid message. If you want to send a message to a new group, first type '{recipients} /rs' followed by your message!" + "\n"); 
+				//tf.setText("");
 			} 
 		}); 
 
@@ -167,7 +170,7 @@ public class someshit extends Application{
 						System.out.println(names[i]);
 						if(names[i].equals(this.ID)){
 							String[] truemessage = splited[1].split("sd/");
-							ta.appendText(splited[0] + "(" + truemessage[0] + ")" + ":" + truemessage[1] + "\n");
+							ta.appendText(splited[0] + "(" + truemessage[0] + ")" + ": " + truemessage[1] + "\n");
 						}
 					}
 					//ta.appendText(message + "\n");
